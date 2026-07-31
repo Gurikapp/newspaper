@@ -3,5 +3,15 @@
   "outputDirectory": "build",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  ],
+  "env": {
+    "PUBLIC_SUPABASE_URL": "https://uavvrzessmalzfzujfjn.supabase.co",
+    "PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_kcNPq_SuWfs_jk8sRPeF2w_fAmurzVw"
+  },
+  "build": {
+    "env": {
+      "PUBLIC_SUPABASE_URL": "https://uavvrzessmalzfzujfjn.supabase.co",
+      "PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_kcNPq_SuWfs_jk8sRPeF2w_fAmurzVw"
+    }
+  }
 }
