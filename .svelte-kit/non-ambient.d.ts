@@ -39,7 +39,7 @@ declare module "$app/types" {
 			"/admin/components": Record<string, never>;
 			"/admin/login": Record<string, never>
 		};
-		Pathname(): "/" | "/admin" | "/admin/login";
+		Pathname(): "/" | "/admin/" | "/admin/login/";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
 		Asset(): "/fonts/Cheshirskiy Cat.ttf" | "/fonts/CoquetteC.ttf" | "/fonts/Kot Leopold.ttf" | "/fonts/Matreshka.ttf" | "/fonts/Neucha.ttf" | "/fonts/Old Comedy.ttf" | "/fonts/Realize My Passion.ttf" | "/fonts/Samba.ttf" | string & {};
 	}
