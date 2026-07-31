@@ -1,17 +1,41 @@
 <script>
-  import Masthead from '$lib/components/Masthead.svelte';
-  import EventsColumn from '$lib/components/EventsColumn.svelte';
-  import NewsColumn from '$lib/components/NewsColumn.svelte';
-  import EditorialColumn from '$lib/components/EditorialColumn.svelte';
-  import CreativeColumn from '$lib/components/CreativeColumn.svelte';
-  import Footer from '$lib/components/Footer.svelte';
+  import Masthead from "$lib/components/Masthead.svelte";
+  import EventsColumn from "$lib/components/EventsColumn.svelte";
+  import NewsColumn from "$lib/components/NewsColumn.svelte";
+  import EditorialColumn from "$lib/components/EditorialColumn.svelte";
+  import CreativeColumn from "$lib/components/CreativeColumn.svelte";
+  import Footer from "$lib/components/Footer.svelte";
 
-  import { meta, events, news, editorial, creative, socialLinks } from '$lib/data/content.js';
+  import { getNews } from "$lib/api/news";
+  import { getEvents } from "$lib/api/events";
+  import { getEditorial } from "$lib/api/editorial";
+  import { getCreative } from "$lib/api/creative";
+
+  import { meta, socialLinks } from "$lib/data/content.js";
+
+  import { onMount } from "svelte";
+
+  let news = [];
+  let events = [];
+  let editorial = null;
+  let creative = [];
+
+  onMount(async () => {
+    news = await getNews();
+    events = await getEvents();
+    editorial = await getEditorial();
+    creative = await getCreative();
+
+    console.log('creative:', creative);
+  });
 </script>
 
 <svelte:head>
   <title>Суета Ордена — №{meta.issueNumber}</title>
-  <meta name="description" content="Газета Ордена Зелёной Ленточки, Повязанной на Сломанный Зонтик" />
+  <meta
+    name="description"
+    content="Газета Ордена Зелёной Ленточки, Повязанной на Сломанный Зонтик"
+  />
 </svelte:head>
 
 <div class="page-wrapper">
@@ -20,7 +44,9 @@
     <main class="columns-grid">
       <EventsColumn {events} />
       <NewsColumn {news} />
-      <EditorialColumn {editorial} />
+      {#if editorial}
+        <EditorialColumn {editorial} />
+      {/if}
       <CreativeColumn {creative} />
     </main>
     <Footer links={socialLinks} {meta} />
@@ -29,27 +55,31 @@
 
 <style>
   :global(:root) {
-    --paper:        #EAE4D0;
-    --paper-dark:   #DDD6C0;
-    --ink:          #111010;
-    --ink-mid:      #2A2620;
-    --ink-light:    #3E3830;
-    --rule:         #9A9080;
-    --rule-light:   #C4BAA4;
-    --green:        #3A6347;
-    --green-light:  #6B9E7A;
-    --accent:       #2C2C2C;
+    --paper: #eae4d0;
+    --paper-dark: #ddd6c0;
+    --ink: #111010;
+    --ink-mid: #2a2620;
+    --ink-light: #3e3830;
+    --rule: #9a9080;
+    --rule-light: #c4baa4;
+    --green: #3a6347;
+    --green-light: #6b9e7a;
+    --accent: #2c2c2c;
 
-    --font-display: 'Cheshirskiy Cat', 'Kot Leopold', serif;
-    --font-body:    'CoquetteC', 'Old Comedy', 'Matreshka', serif;
-    --font-sub:     'Neucha', 'Realize My Passion', 'Samba', serif;
+    --font-display: "Cheshirskiy Cat", "Kot Leopold", serif;
+    --font-body: "CoquetteC", "Old Comedy", "Matreshka", serif;
+    --font-sub: "Neucha", "Realize My Passion", "Samba", serif;
   }
 
-  :global(*) { box-sizing: border-box; margin: 0; padding: 0; }
+  :global(*) {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
   :global(body) {
     margin: 0;
-    background: #C8BFA8;
+    background: #c8bfa8;
     min-height: 100vh;
   }
 
@@ -77,8 +107,13 @@
     padding: 0 1rem;
     border-right: 1px solid var(--rule);
   }
-  .columns-grid :global(.col:first-child) { padding-left: 0; }
-  .columns-grid :global(.col:last-child)  { padding-right: 0; border-right: none; }
+  .columns-grid :global(.col:first-child) {
+    padding-left: 0;
+  }
+  .columns-grid :global(.col:last-child) {
+    padding-right: 0;
+    border-right: none;
+  }
 
   :global(.rubric) {
     font-family: var(--font-body);
@@ -117,25 +152,37 @@
 
   /* Адаптив */
   @media (max-width: 900px) {
-    .columns-grid { grid-template-columns: 1fr 1fr; }
-    .columns-grid :global(.col:nth-child(2)) { border-right: none; }
+    .columns-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .columns-grid :global(.col:nth-child(2)) {
+      border-right: none;
+    }
     .columns-grid :global(.col:nth-child(3)) {
       padding-left: 0;
       border-top: 2px solid var(--ink);
       border-right: 1px solid var(--rule);
-      padding-top: 1rem; margin-top: 1rem;
+      padding-top: 1rem;
+      margin-top: 1rem;
     }
     .columns-grid :global(.col:nth-child(4)) {
       border-right: none;
       border-top: 2px solid var(--ink);
-      padding-top: 1rem; margin-top: 1rem;
+      padding-top: 1rem;
+      margin-top: 1rem;
     }
   }
 
   @media (max-width: 580px) {
-    .page-wrapper { padding: 0; }
-    .newspaper { padding: 1rem; }
-    .columns-grid { grid-template-columns: 1fr; }
+    .page-wrapper {
+      padding: 0;
+    }
+    .newspaper {
+      padding: 1rem;
+    }
+    .columns-grid {
+      grid-template-columns: 1fr;
+    }
     .columns-grid :global(.col) {
       padding: 0 !important;
       border-right: none !important;
@@ -143,6 +190,10 @@
       padding-top: 1rem !important;
       margin-top: 1rem;
     }
-    .columns-grid :global(.col:first-child) { border-top: none; margin-top: 0; padding-top: 0 !important; }
+    .columns-grid :global(.col:first-child) {
+      border-top: none;
+      margin-top: 0;
+      padding-top: 0 !important;
+    }
   }
 </style>

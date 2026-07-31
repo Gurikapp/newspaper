@@ -1,4 +1,5 @@
 <script>
+  import Markdown from "./Markdown.svelte";
   export let events;
 
   const typeIcons = {
@@ -32,11 +33,9 @@
       </div>
       <h3 class="event-title">{event.title}</h3>
       <p class="event-place body-text"><em>{event.place}</em></p>
-      <p class="event-desc body-text">
-        {#each event.description as para}
-          <p class="event-desc body-text">{@html para}</p>
-        {/each}
-      </p>
+      <div class="event-desc body-text">
+        <Markdown content={event.description} />
+      </div>
     </article>
     <hr class="thin-rule" />
   {/each}
@@ -45,14 +44,6 @@
 </section>
 
 <style>
-  :global(.event-desc a) {
-    color: #000000;
-  }
-
-  :global(.event-desc a:hover) {
-    color: #3e3e3e;
-    text-decoration: none;
-  }
 
   .lede-quote {
     font-family: var(--font-display);

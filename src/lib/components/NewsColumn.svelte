@@ -1,4 +1,6 @@
 <script>
+  import Markdown from "./Markdown.svelte";
+
   export let news;
 </script>
 
@@ -12,12 +14,15 @@
       {#if i === 0}
         <!-- Главная новость -->
         <div class="featured-date">
-          <span class="bullet">·</span> {item.date}.
+          <span class="bullet">·</span>
+          {item.date}.
         </div>
       {/if}
 
       <h3 class="news-headline" class:featured={i === 0}>{item.headline}</h3>
-      <p class="body-text">{item.body}</p>
+      <div class="body-text">
+        <Markdown content={item.body} />
+      </div>
 
       {#if i === 0}
         <!-- Изображение -->

@@ -1,4 +1,6 @@
 <script>
+  import Markdown from "./Markdown.svelte";
+
   export let creative;
 </script>
 
@@ -11,23 +13,46 @@
     <article class="creative-item">
       {#if item.type === "poem"}
         <div class="item-kicker">Стихи</div>
-        <h3 class="item-head">{item.title}</h3>
+        {#if item.title}
+          <h3 class="item-head">{item.title}</h3>
+        {/if}
         <pre class="poem-text">{item.content}</pre>
-        <p class="byline">✒ {item.author}</p>
+        {#if item.author}
+          <p class="byline">✒ {item.author}</p>
+        {/if}
       {:else if item.type === "artwork"}
-        <h3 class="item-head">{item.title}</h3>
+        {#if item.title}
+          <h3 class="item-head">{item.title}</h3>
+        {/if}
         <div class="artwork-frame">
-          <span class="art-emoji">🎨</span>
+          {#if item.image_url}
+            <img
+              src={item.image_url}
+              alt={item.image_alt ?? "Работа участника"}
+            />
+          {:else}
+            <span class="art-emoji">🎨</span>
+          {/if}
         </div>
-        <p class="artwork-caption body-text">{item.description}</p>
-        <p class="byline">✒ {item.author}</p>
+        {#if item.content}
+          <p class="artwork-caption body-text">{item.content}</p>
+        {/if}
+        {#if item.author}
+          <p class="byline">✒ {item.author}</p>
+        {/if}
       {:else if item.type === "quote"}
         <div class="item-kicker">Цитата месяца</div>
         <div class="quote-block">
-          <p class="quote-text">{item.content}</p>
-          <p class="quote-src">{item.source}</p>
+          {#if item.content}
+            <p class="quote-text">{item.content}</p>
+          {/if}
+          {#if item.source}
+            <p class="quote-src">{item.source}</p>
+          {/if}
         </div>
-        <p class="byline-small">{item.author}</p>
+        {#if item.author}
+          <p class="byline-small">{item.author}</p>
+        {/if}
 
         <!-- Логотип? -->
         <div class="deco-label">
@@ -36,10 +61,18 @@
           </div>
         </div>
       {:else if item.type === "prose"}
-        <div class="item-kicker">Какой-нибудь вдохновенный творческий текст</div>
-        <h3 class="item-head">{item.title}</h3>
-        <p class="body-text prose-text">{item.content}</p>
-        <p class="byline">✒ {item.author}</p>
+        <div class="item-kicker">
+          Какой-нибудь вдохновенный творческий текст
+        </div>
+        {#if item.title}
+          <h3 class="item-head">{item.title}</h3>
+        {/if}
+        <div class="body-text prose-text">
+          <Markdown content={item.content} />
+        </div>
+        {#if item.author}
+          <p class="byline">✒ {item.author}</p>
+        {/if}
       {/if}
     </article>
 
@@ -110,6 +143,12 @@
   .art-emoji {
     font-size: 3rem;
     opacity: 0.3;
+  }
+
+  .artwork-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .artwork-caption {

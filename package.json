@@ -14,5 +14,9 @@
     "svelte": "^4.2.20",
     "vite": "^5.4.21"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.111.0",
+    "marked": "^18.0.7"
+  }
 }
